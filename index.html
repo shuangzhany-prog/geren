@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人品牌 · 创意工作室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f2ec;
+    --gold: #c8a96e;
+    --gold-light: #e8d5aa;
+    --red-accent: #c0392b;
+    --muted: #7a7570;
+    --border: rgba(200,169,110,0.25);
+    --glow: rgba(200,169,110,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Noto Sans SC', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(200,169,110,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    opacity: 0.7;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* SECTIONS */
+  section { position: relative; }
+
+  /* === BANNER === */
+  #banner {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  canvas#particles {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+  }
+
+  .banner-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,169,110,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .banner-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .banner-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .banner-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+    margin-bottom: 1rem;
+  }
+  .banner-title em {
+    font-style: normal;
+    color: var(--gold);
+    position: relative;
+    display: inline-block;
+  }
+  .banner-title em::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    animation: lineGrow 1s ease 1.2s both;
+    transform-origin: left;
+  }
+  @keyframes lineGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .banner-sub {
+    font-size: 1rem;
+    color: rgba(245,242,236,0.5);
+    letter-spacing: 0.08em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+    margin-bottom: 3rem;
+  }
+
+  .banner-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.5rem;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary:hover span { color: var(--ink); }
+
+  .btn-outline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.5rem;
+    border: 1px solid var(--border);
+    color: var(--paper);
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.5s forwards;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollAnim 2s ease-in-out infinite;
+  }
+  @keyframes scrollAnim {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+  .scroll-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  /* === ABOUT === */
+  #about {
+    padding: 12rem 5vw;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  #about::before {
+    content: 'ABOUT';
+    position: absolute;
+    right: -2%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 15vw;
+    font-weight: 700;
+    color: rgba(200,169,110,0.03);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .about-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 8rem;
+    align-items: center;
+  }
+
+  .about-left .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .about-left .section-label::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--gold);
+  }
+
+  .about-left h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+  }
+  .about-left h2 .accent { color: var(--gold); }
+
+  .avatar-frame {
+    position: relative;
+    width: 320px;
+    height: 380px;
+    margin: 0 auto;
+  }
+  .avatar-bg {
+    position: absolute;
+    inset: 20px 0 0 20px;
+    background: rgba(200,169,110,0.08);
+    border: 1px solid var(--border);
+  }
+  .avatar-img {
+    position: absolute;
+    inset: 0 20px 20px 0;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 5rem;
+    color: var(--gold);
+    overflow: hidden;
+  }
+  .avatar-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(10,10,15,0.4));
+  }
+  .avatar-tag {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.4rem 0.8rem;
+    font-weight: 700;
+  }
+
+  .about-right p {
+    font-size: 1.05rem;
+    line-height: 1.95;
+    color: rgba(245,242,236,0.72);
+    margin-bottom: 1.5rem;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-item .num {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-item .label {
+    font-size: 0.8rem;
+    color: rgba(245,242,236,0.45);
+    letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+  }
+
+  /* === SERVICES === */
+  #services {
+    padding: 12rem 5vw;
+    background: #06060a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .services-header {
+    max-width: 1200px;
+    margin: 0 auto 6rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .services-header h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .services-header h2 .accent { color: var(--gold); }
+  .services-header p {
+    max-width: 320px;
+    color: rgba(245,242,236,0.45);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    text-align: right;
+  }
+
+  .services-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .service-card {
+    padding: 3.5rem 2.5rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(200,169,110,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,169,110,0.05) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover { transform: translateY(-6px); border-color: rgba(200,169,110,0.35); }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 2rem;
+  }
+  .service-icon {
+    width: 56px; height: 56px;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .service-icon svg {
+    width: 100%; height: 100%;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .service-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .service-card:hover h3 { color: var(--gold); }
+
+  .service-card p {
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: rgba(245,242,236,0.5);
+    margin-bottom: 2rem;
+  }
+
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid rgba(200,169,110,0.2);
+    color: rgba(200,169,110,0.6);
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .service-card:hover .tag {
+    border-color: rgba(200,169,110,0.5);
+    color: var(--gold);
+  }
+
+  .service-arrow {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    color: var(--gold);
+    font-size: 1rem;
+  }
+  .service-card:hover .service-arrow {
+    background: var(--gold);
+    color: var(--ink);
+    transform: rotate(-45deg);
+  }
+
+  /* === CONTACT === */
+  #contact {
+    padding: 12rem 5vw;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-bg-text {
+    position: absolute;
+    left: -2%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 15vw;
+    font-weight: 700;
+    color: rgba(200,169,110,0.025);
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: start;
+  }
+
+  .contact-left .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .contact-left .section-label::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--gold);
+  }
+  .contact-left h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  .contact-left p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: rgba(245,242,236,0.55);
+    margin-bottom: 3rem;
+  }
+
+  .contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-info-item:last-child { border-bottom: none; }
+  .contact-info-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--gold);
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+  .contact-info-item:hover .contact-info-icon {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .contact-info-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .contact-info-value {
+    font-size: 0.95rem;
+    color: var(--paper);
+  }
+
+  /* Contact Form */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-group {
+    position: relative;
+    margin-bottom: 2px;
+  }
+  .form-group label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(200,169,110,0.15);
+    color: var(--paper);
+    padding: 1rem 1.2rem;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s;
+    appearance: none;
+    border-radius: 0;
+    margin-bottom: 1.5rem;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--gold);
+    background: rgba(200,169,110,0.04);
+  }
+  .form-group textarea { resize: none; height: 130px; }
+  .form-group select option { background: #1a1a1a; color: var(--paper); }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #e8d5aa;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .submit-btn:hover::before { transform: scaleX(1); }
+  .submit-btn span { position: relative; z-index: 1; }
+
+  /* FOOTER */
+  footer {
+    padding: 2.5rem 5vw;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ink);
+  }
+  .footer-logo {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  footer p {
+    font-size: 0.75rem;
+    color: rgba(245,242,236,0.25);
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* Floating shapes */
+  .float-shape {
+    position: absolute;
+    border: 1px solid rgba(200,169,110,0.1);
+    border-radius: 50%;
+    animation: floatAnim 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes floatAnim {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+
+  /* Line decoration */
+  .deco-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin: 1.5rem 0;
+  }
+
+  /* Horizontal marquee */
+  .marquee-section {
+    overflow: hidden;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(200,169,110,0.02);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 4rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(200,169,110,0.35);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .marquee-item::before {
+    content: '◆';
+    font-size: 0.5rem;
+    color: var(--gold);
+    opacity: 0.4;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 900px) {
+    .about-inner { grid-template-columns: 1fr; gap: 4rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 4rem; }
+    .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .services-header p { text-align: left; max-width: 100%; }
+    .form-row { grid-template-columns: 1fr; }
+    .avatar-frame { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#banner" class="nav-logo">创 · Studio</a>
+  <ul class="nav-links">
+    <li><a href="#banner">首页</a></li>
+    <li><a href="#about">关于</a></li>
+    <li><a href="#services">服务</a></li>
+    <li><a href="#contact">联系</a></li>
+  </ul>
+</nav>
+
+<!-- BANNER -->
+<section id="banner">
+  <div class="banner-grid"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="float-shape" style="width:300px;height:300px;top:10%;left:-5%;animation-delay:0s;opacity:0.3;"></div>
+  <div class="float-shape" style="width:150px;height:150px;bottom:15%;right:5%;animation-delay:2s;opacity:0.2;"></div>
+  <div class="float-shape" style="width:80px;height:80px;top:30%;right:15%;animation-delay:4s;opacity:0.4;"></div>
+
+  <div class="banner-content">
+    <p class="banner-eyebrow">✦ &nbsp; 数字创意工作室 &nbsp; ✦</p>
+    <h1 class="banner-title">打造<em>卓越</em>数字体验</h1>
+    <p class="banner-sub">独立站 · 小程序 · 品牌运营 · 全链路数字化解决方案</p>
+    <div class="banner-cta">
+      <a href="#services" class="btn-primary"><span>探索服务</span></a>
+      <a href="#contact" class="btn-outline">开始合作</a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span class="scroll-text">SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item">独立站开发</span>
+    <span class="marquee-item">小程序定制</span>
+    <span class="marquee-item">品牌运营</span>
+    <span class="marquee-item">电商设计</span>
+    <span class="marquee-item">SEO 优化</span>
+    <span class="marquee-item">内容营销</span>
+    <span class="marquee-item">数据分析</span>
+    <span class="marquee-item">转化率提升</span>
+    <span class="marquee-item">独立站开发</span>
+    <span class="marquee-item">小程序定制</span>
+    <span class="marquee-item">品牌运营</span>
+    <span class="marquee-item">电商设计</span>
+    <span class="marquee-item">SEO 优化</span>
+    <span class="marquee-item">内容营销</span>
+    <span class="marquee-item">数据分析</span>
+    <span class="marquee-item">转化率提升</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-left">
+      <p class="section-label reveal">关于我</p>
+      <h2 class="reveal reveal-delay-1">深耕<span class="accent">数字营销</span><br>五年的实战者</h2>
+      <div class="deco-line reveal reveal-delay-2"></div>
+
+      <div class="avatar-frame reveal reveal-delay-2">
+        <div class="avatar-bg"></div>
+        <div class="avatar-img">
+          <svg viewBox="0 0 100 100" width="120" height="120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="35" r="20" stroke="#c8a96e" stroke-width="1.5"/>
+            <path d="M10 90 Q50 60 90 90" stroke="#c8a96e" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="avatar-tag">Creator</div>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <p class="reveal">你好，我是一名专注于跨境电商与数字营销领域的独立创业者。从品牌从 0 到 1 的搭建，到成熟项目的精细化运营，我拥有覆盖全链路的实战经验。</p>
+      <p class="reveal reveal-delay-1">我相信每一个品牌都有其独特的故事，而我的职责就是用技术与创意，让这个故事在数字世界清晰有力地传达出去。每一个独立站、每一个小程序，都是品牌与用户建立深度连接的关键触点。</p>
+      <p class="reveal reveal-delay-2">无论你是刚起步的创业者，还是寻求突破的成熟品牌，我都可以为你提供量身定制的解决方案，助力业务实现真正意义上的增长。</p>
+
+      <div class="stats-row reveal reveal-delay-3">
+        <div class="stat-item">
+          <span class="num">50+</span>
+          <span class="label">服务项目</span>
+        </div>
+        <div class="stat-item">
+          <span class="num">5年</span>
+          <span class="label">行业经验</span>
+        </div>
+        <div class="stat-item">
+          <span class="num">98%</span>
+          <span class="label">客户满意度</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header reveal">
+    <div>
+      <p style="font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;">
+        <span style="display:inline-block;width:30px;height:1px;background:var(--gold);"></span>服务内容
+      </p>
+      <h2>我能为你<br><span class="accent">做什么</span></h2>
+    </div>
+    <p>专注三大核心领域，<br>为你的品牌创造可量化的价值增长。</p>
+  </div>
+
+  <div class="services-grid">
+    <!-- 独立站 -->
+    <div class="service-card reveal">
+      <div class="service-number">01 / 03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="8" width="40" height="28" rx="2"/>
+          <path d="M16 36v4M32 36v4M12 40h24"/>
+          <path d="M4 20h40"/>
+          <circle cx="10" cy="14" r="1.5" fill="#c8a96e"/>
+          <circle cx="16" cy="14" r="1.5" fill="#c8a96e"/>
+          <circle cx="22" cy="14" r="1.5" fill="#c8a96e"/>
+          <path d="M28 26l4-4-4-4M20 22l-4 4 4 4"/>
+        </svg>
+      </div>
+      <h3>独立站开发</h3>
+      <p>从架构设计到视觉呈现，打造高转化率的独立电商网站。注重用户体验与品牌调性，每一个细节都精心雕琢，让你的独立站成为最强力的销售引擎。</p>
+      <div class="service-tags">
+        <span class="tag">Shopify</span>
+        <span class="tag">WordPress</span>
+        <span class="tag">自定义开发</span>
+        <span class="tag">SEO</span>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+
+    <!-- 小程序 -->
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-number">02 / 03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect x="12" y="4" width="24" height="40" rx="4"/>
+          <path d="M19 8h10"/>
+          <circle cx="24" cy="38" r="2"/>
+          <rect x="16" y="14" width="16" height="18" rx="2"/>
+          <path d="M20 20h8M20 24h6"/>
+        </svg>
+      </div>
+      <h3>小程序开发</h3>
+      <p>深度理解微信生态，开发功能完善、体验流畅的小程序。无论是商城、预约、社区还是工具类产品，都能快速触达海量微信用户，降低获客成本。</p>
+      <div class="service-tags">
+        <span class="tag">微信小程序</span>
+        <span class="tag">支付宝小程序</span>
+        <span class="tag">云开发</span>
+        <span class="tag">UI 设计</span>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+
+    <!-- 运营 -->
+    <div class="service-card reveal reveal-delay-4">
+      <div class="service-number">03 / 03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 36l8-10 8 6 8-16 8 8"/>
+          <circle cx="8" cy="36" r="2" fill="#c8a96e"/>
+          <circle cx="16" cy="26" r="2" fill="#c8a96e"/>
+          <circle cx="24" cy="32" r="2" fill="#c8a96e"/>
+          <circle cx="32" cy="16" r="2" fill="#c8a96e"/>
+          <circle cx="40" cy="24" r="2" fill="#c8a96e"/>
+          <path d="M6 42h36M6 6v36"/>
+        </svg>
+      </div>
+      <h3>品牌运营</h3>
+      <p>制定系统化的内容营销与社媒运营策略，构建品牌认知，沉淀私域流量。通过数据驱动的精细化运营，持续提升 ROI 与用户留存率。</p>
+      <div class="service-tags">
+        <span class="tag">内容营销</span>
+        <span class="tag">社媒运营</span>
+        <span class="tag">私域流量</span>
+        <span class="tag">数据分析</span>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-bg-text">CONTACT</div>
+
+  <div class="contact-inner">
+    <div class="contact-left">
+      <p class="section-label reveal">联系我</p>
+      <h2 class="reveal reveal-delay-1">让我们<br>开始<span style="color:var(--gold)">合作</span></h2>
+      <p class="reveal reveal-delay-2">无论你有任何项目想法或合作需求，欢迎随时联系。我通常在 24 小时内回复，期待与你共同创造精彩。</p>
+
+      <div class="reveal reveal-delay-3">
+        <div class="contact-info-item">
+          <div class="contact-info-icon">✉</div>
+          <div>
+            <div class="contact-info-label">电子邮件</div>
+            <div class="contact-info-value">hello@studio.com</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">◎</div>
+          <div>
+            <div class="contact-info-label">微信</div>
+            <div class="contact-info-value">studio_wechat</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">◈</div>
+          <div>
+            <div class="contact-info-label">所在城市</div>
+            <div class="contact-info-value">深圳 · 远程协作全国</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-right reveal reveal-delay-2">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>你的姓名</label>
+            <input type="text" placeholder="王小明" required>
+          </div>
+          <div class="form-group">
+            <label>联系方式</label>
+            <input type="text" placeholder="邮件 / 微信 / 手机" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>项目类型</label>
+          <select>
+            <option value="">请选择服务类型</option>
+            <option>独立站开发</option>
+            <option>小程序开发</option>
+            <option>品牌运营</option>
+            <option>综合服务</option>
+            <option>其他咨询</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>项目描述</label>
+          <textarea placeholder="简单描述你的项目需求、预算范围、期望上线时间等..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span id="submitText">发送消息 →</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">创 · Studio</div>
+  <p>© 2025 · All rights reserved · 数字创意工作室</p>
+  <p style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;color:rgba(200,169,110,0.35);">独立站 · 小程序 · 运营</p>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+(function animRing() {
+  rx += (mx - rx) * 0.15;
+  ry += (my - ry) *.15;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('a, button, .service-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    ring.style.borderColor = 'rgba(200,169,110,0.8)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'rgba(200,169,110,0.5)';
+  });
+});
+
+// Navbar scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Particles
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.4;
+    this.speedY = (Math.random() - 0.5) * 0.4;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.pulse = Math.random() * Math.PI * 2;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.pulse += 0.02;
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    const o = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200,169,110,${o})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+// Lines between close particles
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(200,169,110,${0.06 * (1 - dist/100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// Form submit
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const txt = document.getElementById('submitText');
+  btn.style.background = '#2ecc71';
+  txt.textContent = '✓ 消息已发送！';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.style.background = 'var(--gold)';
+    txt.textContent = '发送消息 →';
+    btn.disabled = false;
+    e.target.reset();
+  }, 3000);
+}
+
+// Number counter animation
+function animateCounter(el, target, suffix = '') {
+  let start = 0;
+  const duration = 1800;
+  const startTime = performance.now();
+  const update = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = current + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const nums = e.target.querySelectorAll('.stat-item .num');
+      nums[0] && animateCounter(nums[0], 50, '+');
+      nums[1] && (nums[1].textContent = '5年');
+      nums[2] && animateCounter(nums[2], 98, '%');
+      statsObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const statsRow = document.querySelector('.stats-row');
+if (statsRow) statsObserver.observe(statsRow);
+
+// Parallax banner
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const bannerContent = document.querySelector('.banner-content');
+  const grid = document.querySelector('.banner-grid');
+  if (bannerContent && scrolled < window.innerHeight) {
+    bannerContent.style.transform = `translateY(${scrolled * 0.35}px)`;
+    bannerContent.style.opacity = 1 - scrolled / (window.innerHeight * 0.6);
+    grid.style.transform = `translateY(${scrolled * 0.15}px)`;
+  }
+});
+</script>
+</body>
+</html>
